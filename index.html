@@ -639,29 +639,28 @@
             window.open('preview.html?preview=true', '_blank');
         }
 
-          function generateResult() {
+        function generateResult() {
             if (flowerCount === 0 && photoCount === 0) {
                 showMessage('¡Agrega flores o fotos primero!');
                 return;
             }
-            
-            // Crear objeto con todos los datos
+
+            localStorage.setItem('mothersDayGarden', JSON.stringify(garden));
+            localStorage.setItem('mothersDayLetter', letterEditor.value);
+            localStorage.setItem('mothersDayPhotos', JSON.stringify(photos));
+
+            // Crear enlace de compartir
             const gardenData = {
                 flowers: garden.filter(item => item.type === 'flower'),
                 photos: garden.filter(item => item.type === 'photo'),
                 letter: letterEditor.value,
-                additionalPhotos: photos,
-                timestamp: Date.now()
+                additionalPhotos: photos
             };
-            
-            // Convertir a JSON y codificar para URL
-            const gardenDataStr = JSON.stringify(gardenData);
-            
-            // Usar sessionStorage como alternativa a localStorage
-            sessionStorage.setItem('mothersDayData', gardenDataStr);
-            
-            // Redirigir directamente a preview.html
-            window.location.href = 'preview.html';
+
+            const encodedData = encodeURIComponent(JSON.stringify(gardenData));
+
+            // Abrir vista previa en nueva pestaña
+            window.open('preview.html?data=' + encodedData, '_blank');
         }
 
         function loadSavedData() {
