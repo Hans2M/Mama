@@ -159,8 +159,8 @@
             text-align: center;
             font-size: clamp(1.8rem, 7vw, 2.5rem);
         }
-        /* Modal para ver fotos */
         
+        /* Modal para ver fotos */
         .photo-modal {
             display: none;
             position: fixed;
@@ -256,6 +256,24 @@
                 opacity: 1;
             }
         }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -303,8 +321,11 @@
         </div>
     </div>
 
+    <!-- Toast para mensajes -->
+    <div class="toast" id="toast"></div>
+
     <audio id="backgroundMusic" loop>
-        <source src="mama.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -321,50 +342,70 @@
         const photoModalImg = document.getElementById('photoModalImg');
         const photoModalClose = document.getElementById('photoModalClose');
         const photoModalDownload = document.getElementById('photoModalDownload');
+        const toast = document.getElementById('toast');
 
         let isMusicPlaying = false;
         let gardenData = {};
         let currentPhotoUrl = '';
 
-        // Tipos de flores (debe coincidir con la página principal)
+        // Tipos de flores
         const flowerTypes = ['🌹', '🌸', '🌺', '🌻', '🌼', '🌷', '💐', '🏵️'];
+
+        // Mostrar toast message
+        function showToast(message, duration = 3000) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
 
         // Cargar datos
         function loadData() {
-            // Obtener datos de sessionStorage
-            const savedData = sessionStorage.getItem('mothersDayData');
-
-            if (savedData) {
-                gardenData = JSON.parse(savedData);
+            // Obtener datos de la URL si existen
+            const urlParams = new URLSearchParams(window.location.search);
+            const dataParam = urlParams.get('data');
+            
+            if (dataParam) {
+                try {
+                    gardenData = JSON.parse(decodeURIComponent(dataParam));
+                } catch (e) {
+                    console.error("Error al parsear datos de la URL:", e);
+                    loadDefaultData();
+                }
             } else {
-                // Datos por defecto si no hay nada
-                gardenData = {
-                    flowers: [{
-                        type: 'flower',
-                        content: 1,
-                        x: 100,
-                        y: 100,
-                        size: 30,
-                        color: '#E91E63'
-                    }, {
-                        type: 'flower',
-                        content: 3,
-                        x: 200,
-                        y: 150,
-                        size: 35,
-                        color: '#FF9800'
-                    }],
-                    photos: [],
-                    letter: "Querida mamá,\n\nEste es un regalo especial para ti.\n\nTe amo mucho.",
-                    additionalPhotos: []
-                };
+                loadDefaultData();
             }
 
             renderGarden();
             renderLetter();
             setupPhotoViewer();
             createButterflies(3);
-            setupPhotoViewer();
+            setupShareButtons();
+        }
+
+        function loadDefaultData() {
+            gardenData = {
+                flowers: [{
+                    type: 'flower',
+                    content: 1,
+                    x: 100,
+                    y: 100,
+                    size: 30,
+                    color: '#E91E63'
+                }, {
+                    type: 'flower',
+                    content: 3,
+                    x: 200,
+                    y: 150,
+                    size: 35,
+                    color: '#FF9800'
+                }],
+                photos: [],
+                letter: "Querida mamá,\n\nEste es un regalo especial para ti.\n\nTe amo mucho.",
+                additionalPhotos: []
+            };
         }
 
         function renderGarden() {
@@ -528,17 +569,43 @@
         }
 
         function setupShareButtons() {
-            const shareText = "Mira el jardín especial que creé para el Día de la Madre:";
-            const currentUrl = window.location.href.split('?')[0] + '?data=' + encodeURIComponent(JSON.stringify(gardenData));
+            const shareText = "💐 Mira el jardín especial que creé para el Día de la Madre 💖";
+            const encodedData = encodeURIComponent(JSON.stringify(gardenData));
+            const currentUrl = window.location.href.split('?')[0] + '?data=' + encodedData;
+            const encodedUrl = encodeURIComponent(currentUrl);
+            const encodedMessage = encodeURIComponent(shareText + "\n\n" + currentUrl);
 
-            whatsappShare.href = `https://wa.me/?text=${encodeURIComponent(shareText + " " + currentUrl)}`;
-            facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+            // WhatsApp
+            whatsappShare.href = `https://wa.me/?text=${encodedMessage}`;
+            whatsappShare.addEventListener('click', (e) => {
+                if (!navigator.userAgent.match(/WhatsApp/i)) {
+                    e.preventDefault();
+                    window.open(`https://api.whatsapp.com/send?text=${encodedMessage}`, '_blank');
+                }
+            });
 
+            // Facebook
+            facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+            facebookShare.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, 'fb-share', 'width=600,height=400');
+            });
+
+            // Copiar enlace
             copyLinkBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 navigator.clipboard.writeText(currentUrl)
-                    .then(() => alert('Enlace copiado al portapapeles'))
-                    .catch(() => prompt('Copiar este enlace:', currentUrl));
+                    .then(() => showToast('Enlace copiado al portapeles'))
+                    .catch(() => {
+                        // Fallback para navegadores antiguos
+                        const textarea = document.createElement('textarea');
+                        textarea.value = currentUrl;
+                        document.body.appendChild(textarea);
+                        textarea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textarea);
+                        showToast('Enlace copiado');
+                    });
             });
         }
 
@@ -570,5 +637,4 @@
         window.addEventListener('load', loadData);
     </script>
 </body>
-
 </html>
