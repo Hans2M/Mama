@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -11,7 +12,7 @@
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-
+        
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
             background: linear-gradient(to bottom, #ffd6e7, #ffb3d9);
@@ -22,7 +23,7 @@
             padding: 20px;
             overflow-x: hidden;
         }
-
+        
         .card {
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
@@ -32,7 +33,7 @@
             overflow: hidden;
             margin-bottom: 20px;
         }
-
+        
         .garden-preview {
             position: relative;
             height: 300px;
@@ -42,20 +43,19 @@
             align-items: center;
             overflow: hidden;
         }
-
-        .flower, .garden-photo {
+        
+        .flower,
+        .garden-photo {
             position: absolute;
         }
-
+        
         .flower {
             font-size: 24px;
-            user-select: none;
-            pointer-events: none;
         }
-
+        
         .garden-photo {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             object-fit: cover;
             border-radius: 10px;
             border: 2px solid white;
@@ -63,18 +63,18 @@
             cursor: pointer;
             transition: transform 0.3s;
         }
-
+        
         .garden-photo:hover {
             transform: scale(1.1);
         }
-
+        
         .letter-content {
             padding: 20px;
             font-size: clamp(1rem, 4vw, 1.2rem);
             line-height: 1.6;
             white-space: pre-wrap;
         }
-
+        
         .letter-photos {
             display: flex;
             flex-wrap: wrap;
@@ -82,7 +82,7 @@
             margin-top: 15px;
             justify-content: center;
         }
-
+        
         .letter-photo {
             width: 80px;
             height: 80px;
@@ -92,11 +92,11 @@
             cursor: pointer;
             transition: transform 0.3s;
         }
-
+        
         .letter-photo:hover {
             transform: scale(1.1);
         }
-
+        
         .signature {
             font-family: 'Brush Script MT', cursive;
             font-size: clamp(1.5rem, 6vw, 2rem);
@@ -104,7 +104,7 @@
             margin-top: 20px;
             text-align: right;
         }
-
+        
         .share-buttons {
             display: flex;
             gap: 10px;
@@ -112,7 +112,7 @@
             justify-content: center;
             margin-top: 20px;
         }
-
+        
         .share-btn {
             padding: 10px 20px;
             border-radius: 25px;
@@ -123,11 +123,19 @@
             gap: 8px;
             font-size: clamp(0.9rem, 3.5vw, 1.1rem);
         }
-
-        .whatsapp { background-color: #25D366; }
-        .facebook { background-color: #3b5998; }
-        .copy-link { background-color: #9C27B0; }
-
+        
+        .whatsapp {
+            background-color: #25D366;
+        }
+        
+        .facebook {
+            background-color: #3b5998;
+        }
+        
+        .copy-link {
+            background-color: #9C27B0;
+        }
+        
         .music-control {
             position: fixed;
             bottom: 20px;
@@ -144,15 +152,15 @@
             z-index: 100;
             backdrop-filter: blur(5px);
         }
-
+        
         h1 {
             color: #E91E63;
             margin-bottom: 15px;
             text-align: center;
             font-size: clamp(1.8rem, 7vw, 2.5rem);
         }
-
         /* Modal para ver fotos */
+        
         .photo-modal {
             display: none;
             position: fixed;
@@ -164,28 +172,21 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            animation: fadeIn 0.3s ease-out;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
+        
         .photo-modal-content {
             position: relative;
             max-width: 90%;
             max-height: 90%;
-            text-align: center;
         }
-
+        
         .photo-modal-img {
             max-width: 100%;
-            max-height: 70vh;
+            max-height: 80vh;
             border-radius: 10px;
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
         }
-
+        
         .photo-modal-close {
             position: absolute;
             top: -40px;
@@ -193,103 +194,75 @@
             color: white;
             font-size: 2rem;
             cursor: pointer;
-            background: none;
-            border: none;
         }
-
+        
         .photo-modal-download {
-            display: inline-block;
-            margin-top: 20px;
+            position: absolute;
+            bottom: -50px;
+            right: 0;
             background: #4CAF50;
             color: white;
-            padding: 10px 20px;
+            padding: 10px 15px;
             border-radius: 25px;
             text-decoration: none;
-            font-size: 1rem;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-
-        .photo-modal-download i {
-            margin-right: 8px;
-        }
-
+        
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
-
+        
         .butterfly {
             position: absolute;
             font-size: clamp(1.5rem, 7vw, 2rem);
             animation: fly linear infinite;
             opacity: 0.8;
             z-index: 2;
-            pointer-events: none;
         }
-
+        
         @keyframes fly {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(15px, -10px) rotate(10deg); }
-            50% { transform: translate(30px, 0) rotate(0deg); }
-            75% { transform: translate(15px, 10px) rotate(-10deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(15px, -10px) rotate(10deg);
+            }
+            50% {
+                transform: translate(30px, 0) rotate(0deg);
+            }
+            75% {
+                transform: translate(15px, 10px) rotate(-10deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
         }
-
+        
         @keyframes grow {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* Loading spinner */
-        .spinner {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-        }
-
-        .spinner::after {
-            content: "";
-            display: block;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 4px solid #E91E63;
-            border-color: #E91E63 transparent #E91E63 transparent;
-            animation: spinner 1.2s linear infinite;
-        }
-
-        @keyframes spinner {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 480px) {
-            .garden-photo {
-                width: 50px;
-                height: 50px;
+            0% {
+                transform: scale(0);
+                opacity: 0;
             }
-            
-            .letter-photo {
-                width: 70px;
-                height: 70px;
-            }
-            
-            .photo-modal-img {
-                max-height: 60vh;
+            100% {
+                transform: scale(1);
+                opacity: 1;
             }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
-    <div class="spinner" id="spinner"></div>
-    
     <h1>¡Feliz Día de la Madre! 💐</h1>
-    
+
     <div class="card">
         <div class="garden-preview" id="gardenPreview">
             <!-- Flores y fotos se renderizarán aquí -->
@@ -302,7 +275,7 @@
         </div>
         <div class="signature">Con todo mi amor ❤️</div>
     </div>
-    
+
     <div class="share-buttons">
         <a href="#" class="share-btn whatsapp" id="whatsappShare">
             <i class="fab fa-whatsapp"></i> WhatsApp
@@ -314,7 +287,7 @@
             <i class="fas fa-copy"></i> Copiar Enlace
         </a>
     </div>
-    
+
     <div class="music-control" id="musicControl">
         <i class="fas fa-music"></i>
     </div>
@@ -322,315 +295,273 @@
     <!-- Modal para ver fotos -->
     <div class="photo-modal" id="photoModal">
         <div class="photo-modal-content">
-            <button class="photo-modal-close" id="photoModalClose">&times;</button>
-            <img class="photo-modal-img" id="photoModalImg" alt="Foto ampliada">
+            <span class="photo-modal-close" id="photoModalClose">&times;</span>
+            <img class="photo-modal-img" id="photoModalImg">
             <a href="#" class="photo-modal-download" id="photoModalDownload">
-                <i class="fas fa-download"></i> Descargar Foto
+                <i class="fas fa-download"></i> Descargar
             </a>
         </div>
     </div>
 
     <audio id="backgroundMusic" loop>
         <source src="mama.mp3" type="audio/mpeg">
-        Tu navegador no soporta el elemento de audio.
     </audio>
 
     <script>
         // Elementos del DOM
-        const elements = {
-            gardenPreview: document.getElementById('gardenPreview'),
-            letterContent: document.getElementById('letterContent'),
-            letterPhotosContainer: document.getElementById('letterPhotosContainer'),
-            musicControl: document.getElementById('musicControl'),
-            backgroundMusic: document.getElementById('backgroundMusic'),
-            whatsappShare: document.getElementById('whatsappShare'),
-            facebookShare: document.getElementById('facebookShare'),
-            copyLinkBtn: document.getElementById('copyLinkBtn'),
-            photoModal: document.getElementById('photoModal'),
-            photoModalImg: document.getElementById('photoModalImg'),
-            photoModalClose: document.getElementById('photoModalClose'),
-            photoModalDownload: document.getElementById('photoModalDownload'),
-            spinner: document.getElementById('spinner')
-        };
-        
-        // Estado de la aplicación
-        const state = {
-            isMusicPlaying: false,
-            gardenData: {},
-            currentPhotoUrl: '',
-            isMobile: /Mobi|Android/i.test(navigator.userAgent)
-        };
-        
-        // Tipos de flores
+        const gardenPreview = document.getElementById('gardenPreview');
+        const letterContent = document.getElementById('letterContent');
+        const letterPhotosContainer = document.getElementById('letterPhotosContainer');
+        const musicControl = document.getElementById('musicControl');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+
+        let isMusicPlaying = false;
+        let gardenData = {};
+        let currentPhotoUrl = '';
+
+        // Tipos de flores (debe coincidir con la página principal)
         const flowerTypes = ['🌹', '🌸', '🌺', '🌻', '🌼', '🌷', '💐', '🏵️'];
-        
-        // Inicialización
-        document.addEventListener('DOMContentLoaded', () => {
-            showSpinner();
-            loadData();
-            setupEventListeners();
-            
-            // Intentar reproducción automática después de interacción
-            document.body.addEventListener('click', initAudio, { once: true });
-        });
 
-        function showSpinner() {
-            elements.spinner.style.display = 'block';
-        }
-
-        function hideSpinner() {
-            elements.spinner.style.display = 'none';
-        }
-
-        function initAudio() {
-            elements.backgroundMusic.volume = 0.3;
-            toggleMusic();
-        }
-        
+        // Cargar datos
         function loadData() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const dataParam = urlParams.get('data');
-            
-            try {
-                if (dataParam) {
-                    // Datos compartidos por URL
-                    state.gardenData = JSON.parse(decodeURIComponent(dataParam));
-                } else {
-                    // Datos por defecto
-                    state.gardenData = {
-                        flowers: [
-                            { type: 'flower', content: 1, x: 100, y: 100, size: 30, color: '#E91E63' },
-                            { type: 'flower', content: 3, x: 200, y: 150, size: 35, color: '#FF9800' }
-                        ],
-                        photos: [],
-                        letter: "Querida mamá,\n\nEste es un regalo especial para ti.\n\nTe amo mucho.",
-                        additionalPhotos: []
-                    };
-                }
-                
-                renderGarden();
-                renderLetter();
-                setupShareButtons();
-                createButterflies(3);
-            } catch (error) {
-                console.error("Error al cargar datos:", error);
-                // Mostrar contenido por defecto si hay error
-                state.gardenData = {
-                    flowers: [
-                        { type: 'flower', content: 1, x: 100, y: 100, size: 30, color: '#E91E63' },
-                        { type: 'flower', content: 3, x: 200, y: 150, size: 35, color: '#FF9800' }
-                    ],
+            // Obtener datos de sessionStorage
+            const savedData = sessionStorage.getItem('mothersDayData');
+
+            if (savedData) {
+                gardenData = JSON.parse(savedData);
+            } else {
+                // Datos por defecto si no hay nada
+                gardenData = {
+                    flowers: [{
+                        type: 'flower',
+                        content: 1,
+                        x: 100,
+                        y: 100,
+                        size: 30,
+                        color: '#E91E63'
+                    }, {
+                        type: 'flower',
+                        content: 3,
+                        x: 200,
+                        y: 150,
+                        size: 35,
+                        color: '#FF9800'
+                    }],
                     photos: [],
                     letter: "Querida mamá,\n\nEste es un regalo especial para ti.\n\nTe amo mucho.",
                     additionalPhotos: []
                 };
-                renderGarden();
-                renderLetter();
-            } finally {
-                hideSpinner();
+            }
+
+            renderGarden();
+            renderLetter();
+            setupPhotoViewer();
+            createButterflies(3);
+            setupPhotoViewer();
+        }
+
+        function renderGarden() {
+            gardenPreview.innerHTML = '';
+
+            // Renderizar flores
+            if (gardenData.flowers && gardenData.flowers.length > 0) {
+                gardenData.flowers.forEach(flower => {
+                    const flowerElement = document.createElement('div');
+                    flowerElement.className = 'flower';
+                    flowerElement.innerHTML = flowerTypes[flower.content];
+                    flowerElement.style.left = `${(flower.x / window.innerWidth) * 100}%`;
+                    flowerElement.style.top = `${(flower.y / window.innerHeight) * 100}%`;
+                    flowerElement.style.fontSize = `${flower.size}px`;
+                    flowerElement.style.color = flower.color;
+                    flowerElement.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    flowerElement.style.animation = 'grow 0.5s ease-out';
+
+                    gardenPreview.appendChild(flowerElement);
+                });
+            }
+
+            // Renderizar fotos en el jardín
+            if (gardenData.photos && gardenData.photos.length > 0) {
+                gardenData.photos.forEach(photo => {
+                    const photoElement = document.createElement('img');
+                    photoElement.className = 'garden-photo';
+                    photoElement.src = photo.content;
+                    photoElement.style.left = `${(photo.x / window.innerWidth) * 100}%`;
+                    photoElement.style.top = `${(photo.y / window.innerHeight) * 100}%`;
+                    photoElement.style.animation = 'grow 0.5s ease-out';
+                    photoElement.dataset.photoUrl = photo.content;
+
+                    gardenPreview.appendChild(photoElement);
+                });
+            }
+
+            // Si no hay nada, mostrar jardín por defecto
+            if ((!gardenData.flowers || gardenData.flowers.length === 0) &&
+                (!gardenData.photos || gardenData.photos.length === 0)) {
+                const defaultFlowers = [{
+                    content: 1,
+                    x: 100,
+                    y: 100,
+                    size: 30,
+                    color: '#E91E63'
+                }, {
+                    content: 3,
+                    x: 200,
+                    y: 150,
+                    size: 35,
+                    color: '#FF9800'
+                }];
+
+                defaultFlowers.forEach(flower => {
+                    const flowerElement = document.createElement('div');
+                    flowerElement.className = 'flower';
+                    flowerElement.innerHTML = flowerTypes[flower.content];
+                    flowerElement.style.left = `${(flower.x / window.innerWidth) * 100}%`;
+                    flowerElement.style.top = `${(flower.y / window.innerHeight) * 100}%`;
+                    flowerElement.style.fontSize = `${flower.size}px`;
+                    flowerElement.style.color = flower.color;
+                    flowerElement.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    flowerElement.style.animation = 'grow 0.5s ease-out';
+
+                    gardenPreview.appendChild(flowerElement);
+                });
             }
         }
-        
-        function setupEventListeners() {
-            // Control de música
-            elements.musicControl.addEventListener('click', toggleMusic);
-            
-            // Compartir
-            elements.copyLinkBtn.addEventListener('click', handleCopyLink);
-            
-            // Modal de fotos
-            elements.photoModalClose.addEventListener('click', () => {
-                elements.photoModal.style.display = 'none';
+
+        function renderLetter() {
+            if (gardenData.letter && gardenData.letter.trim() !== '') {
+                letterContent.textContent = gardenData.letter;
+            } else {
+                letterContent.textContent = "Querida mamá,\n\nEste jardín fue creado con mucho amor solo para ti.\n\nEres la mejor mamá del mundo.";
+            }
+
+            // Renderizar fotos adicionales de la carta
+            if (gardenData.additionalPhotos && gardenData.additionalPhotos.length > 0) {
+                letterPhotosContainer.innerHTML = '';
+                gardenData.additionalPhotos.forEach(photoUrl => {
+                    const photoElement = document.createElement('img');
+                    photoElement.className = 'letter-photo';
+                    photoElement.src = photoUrl;
+                    photoElement.style.animation = 'grow 0.5s ease-out';
+                    photoElement.dataset.photoUrl = photoUrl;
+
+                    letterPhotosContainer.appendChild(photoElement);
+                });
+            }
+        }
+
+        function setupPhotoViewer() {
+            // Eventos para fotos en el jardín
+            document.querySelectorAll('.garden-photo').forEach(photo => {
+                photo.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showPhotoModal(photo.dataset.photoUrl);
+                });
             });
-            
-            elements.photoModal.addEventListener('click', (e) => {
-                if (e.target === elements.photoModal) {
-                    elements.photoModal.style.display = 'none';
+
+            // Eventos para fotos en la carta
+            document.querySelectorAll('.letter-photo').forEach(photo => {
+                photo.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showPhotoModal(photo.dataset.photoUrl);
+                });
+            });
+
+            // Cerrar modal
+            photoModalClose.addEventListener('click', () => {
+                photoModal.style.display = 'none';
+            });
+
+            // Cerrar al hacer clic fuera de la imagen
+            photoModal.addEventListener('click', (e) => {
+                if (e.target === photoModal) {
+                    photoModal.style.display = 'none';
                 }
             });
-            
-            elements.photoModalDownload.addEventListener('click', (e) => {
+
+            // Configurar descarga
+            photoModalDownload.addEventListener('click', (e) => {
                 e.preventDefault();
-                downloadPhoto(state.currentPhotoUrl);
+                downloadPhoto(currentPhotoUrl);
             });
         }
-        
-        function renderGarden() {
-            elements.gardenPreview.innerHTML = '';
-            
-            // Renderizar flores
-            if (state.gardenData.flowers && state.gardenData.flowers.length > 0) {
-                state.gardenData.flowers.forEach(flower => {
-                    createFlowerElement(flower);
-                });
-            }
-            
-            // Renderizar fotos en el jardín
-            if (state.gardenData.photos && state.gardenData.photos.length > 0) {
-                state.gardenData.photos.forEach(photo => {
-                    createPhotoElement(photo, 'garden-photo');
-                });
-            }
-            
-            // Si no hay nada, mostrar contenido por defecto
-            if ((!state.gardenData.flowers || state.gardenData.flowers.length === 0) && 
-                (!state.gardenData.photos || state.gardenData.photos.length === 0)) {
-                const defaultFlowers = [
-                    { content: 1, x: 100, y: 100, size: 30, color: '#E91E63' },
-                    { content: 3, x: 200, y: 150, size: 35, color: '#FF9800' }
-                ];
-                
-                defaultFlowers.forEach(flower => {
-                    createFlowerElement({...flower, type: 'flower'});
-                });
-            }
+
+        function showPhotoModal(photoUrl) {
+            currentPhotoUrl = photoUrl;
+            photoModalImg.src = photoUrl;
+            photoModal.style.display = 'flex';
+
+            // Actualizar enlace de descarga
+            photoModalDownload.href = photoUrl;
+            photoModalDownload.download = `foto-mama-${Date.now()}.jpg`;
         }
-        
-        function createFlowerElement(flower) {
-            const flowerElement = document.createElement('div');
-            flowerElement.className = 'flower';
-            flowerElement.innerHTML = flowerTypes[flower.content];
-            flowerElement.style.left = `${(flower.x / window.innerWidth) * 100}%`;
-            flowerElement.style.top = `${(flower.y / window.innerHeight) * 100}%`;
-            flowerElement.style.fontSize = `${flower.size}px`;
-            flowerElement.style.color = flower.color || '#000000';
-            flowerElement.style.transform = `rotate(${Math.random() * 360}deg)`;
-            flowerElement.style.animation = 'grow 0.5s ease-out';
-            
-            elements.gardenPreview.appendChild(flowerElement);
+
+        function downloadPhoto(photoUrl) {
+            const link = document.createElement('a');
+            link.href = photoUrl;
+            link.download = `foto-mama-${Date.now()}.jpg`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
-        
-        function createPhotoElement(photo, className) {
-            const photoElement = document.createElement('img');
-            photoElement.className = className;
-            photoElement.src = photo.content;
-            photoElement.style.left = `${(photo.x / window.innerWidth) * 100}%`;
-            photoElement.style.top = `${(photo.y / window.innerHeight) * 100}%`;
-            photoElement.style.animation = 'grow 0.5s ease-out';
-            photoElement.dataset.photoUrl = photo.content;
-            
-            photoElement.addEventListener('click', (e) => {
-                e.stopPropagation();
-                showPhotoModal(photo.content);
-            });
-            
-            if (className === 'garden-photo') {
-                elements.gardenPreview.appendChild(photoElement);
-            } else {
-                elements.letterPhotosContainer.appendChild(photoElement);
-            }
-        }
-        
-        function renderLetter() {
-            if (state.gardenData.letter && state.gardenData.letter.trim() !== '') {
-                elements.letterContent.textContent = state.gardenData.letter;
-            } else {
-                elements.letterContent.textContent = "Querida mamá,\n\nEste jardín fue creado con mucho amor solo para ti.\n\nEres la mejor mamá del mundo.";
-            }
-            
-            // Renderizar fotos adicionales de la carta
-            if (state.gardenData.additionalPhotos && state.gardenData.additionalPhotos.length > 0) {
-                elements.letterPhotosContainer.innerHTML = '';
-                state.gardenData.additionalPhotos.forEach(photoUrl => {
-                    createPhotoElement({
-                        content: photoUrl,
-                        x: 0,
-                        y: 0
-                    }, 'letter-photo');
-                });
-            }
-        }
-        
+
         function createButterflies(count) {
             for (let i = 0; i < count; i++) {
-                setTimeout(() => {
-                    const butterfly = document.createElement('div');
-                    butterfly.className = 'butterfly';
-                    butterfly.innerHTML = '🦋';
-                    butterfly.style.left = `${Math.random() * 100}%`;
-                    butterfly.style.top = `${Math.random() * 100}%`;
-                    butterfly.style.fontSize = `${Math.random() * 20 + 20}px`;
-                    butterfly.style.color = `hsl(${Math.random() * 360}, 80%, 60%)`;
-                    butterfly.style.animationDuration = `${Math.random() * 15 + 10}s`;
-                    
-                    elements.gardenPreview.appendChild(butterfly);
-                }, i * 300);
+                const butterfly = document.createElement('div');
+                butterfly.className = 'butterfly';
+                butterfly.innerHTML = '🦋';
+                butterfly.style.left = `${Math.random() * 100}%`;
+                butterfly.style.top = `${Math.random() * 100}%`;
+                butterfly.style.fontSize = `${Math.random() * 20 + 20}px`;
+                butterfly.style.color = `hsl(${Math.random() * 360}, 80%, 60%)`;
+                butterfly.style.animationDuration = `${Math.random() * 15 + 10}s`;
+
+                gardenPreview.appendChild(butterfly);
             }
         }
-        
-        function showPhotoModal(photoUrl) {
-            state.currentPhotoUrl = photoUrl;
-            elements.photoModalImg.src = photoUrl;
-            elements.photoModal.style.display = 'flex';
-            
-            // Configurar descarga
-            elements.photoModalDownload.href = photoUrl;
-            elements.photoModalDownload.download = `foto-mama-${Date.now()}.jpg`;
-        }
-        
-        function downloadPhoto(photoUrl) {
-            if (!photoUrl) return;
-            
-            try {
-                const link = document.createElement('a');
-                link.href = photoUrl;
-                link.download = `foto-mama-${Date.now()}.jpg`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            } catch (error) {
-                console.error("Error al descargar foto:", error);
-                alert("No se pudo descargar la foto. Intenta nuevamente.");
-            }
-        }
-        
+
         function setupShareButtons() {
             const shareText = "Mira el jardín especial que creé para el Día de la Madre:";
-            const currentUrl = window.location.href.split('?')[0];
-            
-            elements.whatsappShare.href = `https://wa.me/?text=${encodeURIComponent(shareText + " " + currentUrl)}`;
-            elements.facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+            const currentUrl = window.location.href.split('?')[0] + '?data=' + encodeURIComponent(JSON.stringify(gardenData));
+
+            whatsappShare.href = `https://wa.me/?text=${encodeURIComponent(shareText + " " + currentUrl)}`;
+            facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+
+            copyLinkBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                navigator.clipboard.writeText(currentUrl)
+                    .then(() => alert('Enlace copiado al portapapeles'))
+                    .catch(() => prompt('Copiar este enlace:', currentUrl));
+            });
         }
-        
-        function handleCopyLink(e) {
-            e.preventDefault();
-            const currentUrl = window.location.href.split('?')[0];
-            
-            navigator.clipboard.writeText(currentUrl)
-                .then(() => {
-                    alert('Enlace copiado al portapapeles');
-                })
-                .catch(() => {
-                    // Fallback para navegadores que no soportan clipboard API
-                    const tempInput = document.createElement('input');
-                    tempInput.value = currentUrl;
-                    document.body.appendChild(tempInput);
-                    tempInput.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(tempInput);
-                    alert('Enlace copiado');
-                });
-        }
-        
+
         function toggleMusic() {
-            if (state.isMusicPlaying) {
-                elements.backgroundMusic.pause();
-                elements.musicControl.innerHTML = '<i class="fas fa-music"></i>';
+            if (isMusicPlaying) {
+                backgroundMusic.pause();
+                musicControl.innerHTML = '<i class="fas fa-music"></i>';
             } else {
-                elements.backgroundMusic.play()
-                    .then(() => {
-                        state.isMusicPlaying = true;
-                        elements.musicControl.innerHTML = '<i class="fas fa-pause"></i>';
-                    })
-                    .catch(error => {
-                        console.log("Error al reproducir música:", error);
-                        if (state.isMobile) {
-                            alert("Toca la pantalla para activar la música");
-                        }
-                    });
+                backgroundMusic.play()
+                    .then(() => isMusicPlaying = true)
+                    .catch(e => console.log("Error al reproducir:", e));
+                musicControl.innerHTML = '<i class="fas fa-pause"></i>';
             }
-            state.isMusicPlaying = !state.isMusicPlaying;
+            isMusicPlaying = !isMusicPlaying;
         }
+
+        // Inicializar
+        musicControl.addEventListener('click', toggleMusic);
+        backgroundMusic.volume = 0.3;
+
+        // Intentar reproducción automática
+        document.body.addEventListener('click', () => {
+            backgroundMusic.play().then(() => isMusicPlaying = true)
+                .catch(e => console.log("Autoplay bloqueado:", e));
+        }, {
+            once: true
+        });
+
+        window.addEventListener('load', loadData);
     </script>
 </body>
+
 </html>
