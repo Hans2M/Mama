@@ -159,8 +159,8 @@
             text-align: center;
             font-size: clamp(1.8rem, 7vw, 2.5rem);
         }
-        
         /* Modal para ver fotos */
+        
         .photo-modal {
             display: none;
             position: fixed;
@@ -256,60 +256,11 @@
                 opacity: 1;
             }
         }
-        
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 25px;
-            z-index: 1001;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .toast.show {
-            opacity: 1;
-        }
-        
-        .loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1002;
-        }
-        
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #E91E63;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-    </div>
-
     <h1>¡Feliz Día de la Madre! 💐</h1>
 
     <div class="card">
@@ -352,11 +303,8 @@
         </div>
     </div>
 
-    <!-- Toast para mensajes -->
-    <div class="toast" id="toast"></div>
-
     <audio id="backgroundMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <source src="mama.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -366,194 +314,58 @@
         const letterPhotosContainer = document.getElementById('letterPhotosContainer');
         const musicControl = document.getElementById('musicControl');
         const backgroundMusic = document.getElementById('backgroundMusic');
-        const whatsappShare = document.getElementById('whatsappShare');
         const facebookShare = document.getElementById('facebookShare');
         const copyLinkBtn = document.getElementById('copyLinkBtn');
         const photoModal = document.getElementById('photoModal');
         const photoModalImg = document.getElementById('photoModalImg');
         const photoModalClose = document.getElementById('photoModalClose');
         const photoModalDownload = document.getElementById('photoModalDownload');
-        const toast = document.getElementById('toast');
-        const loading = document.getElementById('loading');
+
+
 
         let isMusicPlaying = false;
         let gardenData = {};
         let currentPhotoUrl = '';
 
-        // Tipos de flores
+        // Tipos de flores (debe coincidir con la página principal)
         const flowerTypes = ['🌹', '🌸', '🌺', '🌻', '🌼', '🌷', '💐', '🏵️'];
-
-        // Mostrar toast message
-        function showToast(message, duration = 3000) {
-            toast.textContent = message;
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, duration);
-        }
-
-        // Convertir Data URL a Blob
-        function dataURLtoBlob(dataURL) {
-            const arr = dataURL.split(',');
-            const mime = arr[0].match(/:(.*?);/)[1];
-            const bstr = atob(arr[1]);
-            let n = bstr.length;
-            const u8arr = new Uint8Array(n);
-            
-            while(n--){
-                u8arr[n] = bstr.charCodeAt(n);
-            }
-            
-            return new Blob([u8arr], {type:mime});
-        }
-
-        // Comprimir imagen
-        function compressImage(file, callback) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            
-            reader.onload = function(event) {
-                const img = new Image();
-                img.src = event.target.result;
-                
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    const MAX_WIDTH = 800;
-                    const MAX_HEIGHT = 800;
-                    let width = img.width;
-                    let height = img.height;
-                    
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-                    
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    canvas.toBlob(callback, 'image/jpeg', 0.7);
-                };
-            };
-        }
 
         // Cargar datos
         function loadData() {
-            loading.style.display = 'flex';
-            
-            // Obtener datos de la URL si existen
-            const urlParams = new URLSearchParams(window.location.search);
-            const dataParam = urlParams.get('data');
-            
-            if (dataParam) {
-                try {
-                    const decodedData = decodeURIComponent(dataParam);
-                    gardenData = JSON.parse(decodedData);
-                    
-                    // Procesar imágenes comprimidas (si existen)
-                    const processImages = async () => {
-                        const imageProcessingPromises = [];
-                        
-                        // Procesar fotos del jardín
-                        if (gardenData.photos && gardenData.photos.length > 0) {
-                            for (let i = 0; i < gardenData.photos.length; i++) {
-                                if (gardenData.photos[i].content.startsWith('data:image')) {
-                                    const blob = dataURLtoBlob(gardenData.photos[i].content);
-                                    imageProcessingPromises.push(
-                                        new Promise(resolve => {
-                                            compressImage(blob, (compressedBlob) => {
-                                                const reader = new FileReader();
-                                                reader.onload = () => {
-                                                    gardenData.photos[i].content = reader.result;
-                                                    resolve();
-                                                };
-                                                reader.readAsDataURL(compressedBlob);
-                                            });
-                                        })
-                                    );
-                                }
-                            }
-                        }
-                        
-                        // Procesar fotos adicionales
-                        if (gardenData.additionalPhotos && gardenData.additionalPhotos.length > 0) {
-                            for (let i = 0; i < gardenData.additionalPhotos.length; i++) {
-                                if (gardenData.additionalPhotos[i].startsWith('data:image')) {
-                                    const blob = dataURLtoBlob(gardenData.additionalPhotos[i]);
-                                    imageProcessingPromises.push(
-                                        new Promise(resolve => {
-                                            compressImage(blob, (compressedBlob) => {
-                                                const reader = new FileReader();
-                                                reader.onload = () => {
-                                                    gardenData.additionalPhotos[i] = reader.result;
-                                                    resolve();
-                                                };
-                                                reader.readAsDataURL(compressedBlob);
-                                            });
-                                        })
-                                    );
-                                }
-                            }
-                        }
-                        
-                        await Promise.all(imageProcessingPromises);
-                    };
-                    
-                    processImages().then(() => {
-                        renderGarden();
-                        renderLetter();
-                        setupPhotoViewer();
-                        createButterflies(3);
-                        setupShareButtons();
-                        loading.style.display = 'none';
-                    });
-                    
-                    return;
-                } catch (e) {
-                    console.error("Error al parsear datos de la URL:", e);
-                    showToast("Error al cargar los datos. Mostrando contenido por defecto.");
-                }
+            // Obtener datos de sessionStorage
+            const savedData = sessionStorage.getItem('mothersDayData');
+
+            if (savedData) {
+                gardenData = JSON.parse(savedData);
+            } else {
+                // Datos por defecto si no hay nada
+                gardenData = {
+                    flowers: [{
+                        type: 'flower',
+                        content: 1,
+                        x: 100,
+                        y: 100,
+                        size: 30,
+                        color: '#E91E63'
+                    }, {
+                        type: 'flower',
+                        content: 3,
+                        x: 200,
+                        y: 150,
+                        size: 35,
+                        color: '#FF9800'
+                    }],
+                    photos: [],
+                    letter: "Querida mamá,\n\nEste es un regalo especial para ti.\n\nTe amo mucho.",
+                    additionalPhotos: []
+                };
             }
-            
-            loadDefaultData();
+
             renderGarden();
             renderLetter();
             setupPhotoViewer();
             createButterflies(3);
-            setupShareButtons();
-            loading.style.display = 'none';
-        }
-
-        function loadDefaultData() {
-            gardenData = {
-                flowers: [{
-                    type: 'flower',
-                    content: 1,
-                    x: 100,
-                    y: 100,
-                    size: 30,
-                    color: '#E91E63'
-                }, {
-                    type: 'flower',
-                    content: 3,
-                    x: 200,
-                    y: 150,
-                    size: 35,
-                    color: '#FF9800'
-                }],
-                photos: [],
-                letter: "Querida mamá,\n\nEste es un regalo especial para ti.\n\nTe amo mucho.",
-                additionalPhotos: []
-            };
+            setupPhotoViewer();
         }
 
         function renderGarden() {
@@ -564,7 +376,7 @@
                 gardenData.flowers.forEach(flower => {
                     const flowerElement = document.createElement('div');
                     flowerElement.className = 'flower';
-                    flowerElement.innerHTML = flowerTypes[flower.content % flowerTypes.length];
+                    flowerElement.innerHTML = flowerTypes[flower.content];
                     flowerElement.style.left = `${(flower.x / window.innerWidth) * 100}%`;
                     flowerElement.style.top = `${(flower.y / window.innerHeight) * 100}%`;
                     flowerElement.style.fontSize = `${flower.size}px`;
@@ -611,7 +423,7 @@
                 defaultFlowers.forEach(flower => {
                     const flowerElement = document.createElement('div');
                     flowerElement.className = 'flower';
-                    flowerElement.innerHTML = flowerTypes[flower.content % flowerTypes.length];
+                    flowerElement.innerHTML = flowerTypes[flower.content];
                     flowerElement.style.left = `${(flower.x / window.innerWidth) * 100}%`;
                     flowerElement.style.top = `${(flower.y / window.innerHeight) * 100}%`;
                     flowerElement.style.fontSize = `${flower.size}px`;
@@ -717,43 +529,17 @@
         }
 
         function setupShareButtons() {
-            const shareText = "💐 Mira el jardín especial que creé para el Día de la Madre 💖";
-            const encodedData = encodeURIComponent(JSON.stringify(gardenData));
-            const currentUrl = window.location.href.split('?')[0] + '?data=' + encodedData;
-            const encodedUrl = encodeURIComponent(currentUrl);
-            const encodedMessage = encodeURIComponent(shareText + "\n\n" + currentUrl);
+            const shareText = "Mira el jardín especial que creé para el Día de la Madre:";
+            const currentUrl = window.location.href.split('?')[0] + '?data=' + encodeURIComponent(JSON.stringify(gardenData));
 
-            // WhatsApp
-            whatsappShare.href = `https://wa.me/?text=${encodedMessage}`;
-            whatsappShare.addEventListener('click', (e) => {
-                if (!navigator.userAgent.match(/WhatsApp/i)) {
-                    e.preventDefault();
-                    window.open(`https://api.whatsapp.com/send?text=${encodedMessage}`, '_blank');
-                }
-            });
+            whatsappShare.href = `https://wa.me/?text=${encodeURIComponent(shareText + " " + currentUrl)}`;
+            facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
 
-            // Facebook
-            facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
-            facebookShare.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, 'fb-share', 'width=600,height=400');
-            });
-
-            // Copiar enlace
             copyLinkBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 navigator.clipboard.writeText(currentUrl)
-                    .then(() => showToast('Enlace copiado al portapeles'))
-                    .catch(() => {
-                        // Fallback para navegadores antiguos
-                        const textarea = document.createElement('textarea');
-                        textarea.value = currentUrl;
-                        document.body.appendChild(textarea);
-                        textarea.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(textarea);
-                        showToast('Enlace copiado');
-                    });
+                    .then(() => alert('Enlace copiado al portapapeles'))
+                    .catch(() => prompt('Copiar este enlace:', currentUrl));
             });
         }
 
@@ -785,4 +571,5 @@
         window.addEventListener('load', loadData);
     </script>
 </body>
+
 </html>
